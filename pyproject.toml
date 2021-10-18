@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "timelog-commander"
+version = "0.1.0"
+description = "I command my timelogs"
+authors = ["Anton Alekseev <hi@aalekseev.me>"]
+license = "GNU General Public License v3.0"
+packages = [{include="src"}]
+
+[tool.poetry.dependencies]
+python = "~3.9.0"
+pywebview = "^3.5"
+Flask = "^2.0.2"
+tinydb = "^4.5.2"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.910"
+black = "^21.9b0"
+
+[tool.poetry.scripts]
+gui = 'src.main:run'
+
+[tool.mypy]
+plugins = ["tinydb.mypy_plugin"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

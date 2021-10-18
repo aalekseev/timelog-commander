@@ -1,0 +1,27 @@
+:root {
+  /* bg-gray-300 */
+  --border: #D1D5DB;
+  --border-radius: none;
+  /* bg-gray-50 */
+  --background: #F9FAFB;
+  /* text-gray-500 */
+  --text-main: #6B7280;
+  /* text-gray-600 */
+  --text-bright: #4B5563;
+  /* text-gray-400 */
+  --text-muted: #9CA3AF;
+  /* p-2 */
+  --p-2: 0.5rem;
+}
+
+button {
+  margin: 0;
+  border: 0;
+  width: 100%;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,13 @@
+= Timelog Commander
+
+> Yet another attempt to figure out time-logging for myself. This time with Python
+
+== Dependencies
+
+- poetry
+- Python 3.9
+
+== How To Run?
+
+There is a handy Makefile attached, `make gui` is the entry point
+
