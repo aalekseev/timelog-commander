@@ -1,27 +1,308 @@
-:root {
-  /* bg-gray-300 */
-  --border: #D1D5DB;
-  --border-radius: none;
-  /* bg-gray-50 */
-  --background: #F9FAFB;
-  /* text-gray-500 */
-  --text-main: #6B7280;
-  /* text-gray-600 */
-  --text-bright: #4B5563;
-  /* text-gray-400 */
-  --text-muted: #9CA3AF;
-  /* p-2 */
-  --p-2: 0.5rem;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Universal
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* Apply styling to all elements (including their `::before` and `::after`
+pseudo-elements). One common use of this selector is to apply a custom
+`box-sizing`, e.g. as explained here: https://css-tricks.com/?page_id=175473 */
+*,
+*::before,
+*::after {
+  border: 0 none;
+  box-sizing: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: inherit;
+  font-weight: inherit;
+  outline: 0;
+  vertical-align: baseline;
 }
 
-button {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Root
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+:root {
+  /* 50 shades of gray */
+  --gray-50: #f9fafb;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-4: 1rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--gray-800);
+  color: var(--gray-300);
+  display: flex;
+  flex-direction: column;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: var(--text-base);
+  height: 100vh;
   margin: 0;
-  border: 0;
+  min-height: 100vh;
+  padding: var(--spacing-1);
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Content sectioning
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+nav ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  place-items: center;
+}
+nav li {
+  width: 100%;
+}
+nav button {
+  background-color: var(--gray-600);
+  border-color: var(--gray-700);
+  border-radius: 0;
+  border-style: solid;
+  color: var(--gray-500);
+  padding: var(--spacing-1);
+  width: 100%;
+  text-transform: uppercase;
+}
+
+nav button:hover {
+  background-color: var(--gray-900);
+  color: var(--gray-400);
+}
+
+nav button.active {
+  background-color: var(--gray-200);
+  border: 0 none;
+  color: var(--gray-700);
+}
+
+section {
+  border: 1px solid var(--gray-300);
+  border-top-width: 4px;
+  height: 100%;
+}
+
+section.timer {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+section.timer .timer__title {
+  font-size: var(--text-5xl);
+  margin: 0;
+  overflow: hidden;
+  padding: var(--spacing-4) var(--spacing-2);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--gray-700);
+}
+
+.timer .timer__clock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: var(--spacing-2);
+  font-size: var(--text-6xl);
+}
+
+.timer .timer__clock .seconds {
+  font-size: var(--text-base);
+  color: var(--gray-500);
+  padding-top: var(--spacing-2);
+}
+
+section.timer .timer__time {
+  display: grid;
+  align-self: center;
+  grid-template-columns: auto auto;
+}
+
+section.timer button.close {
+  background-color: transparent;
+  color: var(--gray-500);
+  font-size: var(--text-5xl);
+  justify-self: end;
+  padding-right: var(--spacing-2);
+}
+
+section.timer button.close:hover {
+  color: var(--gray-300);
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Text block content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* Overall styling, e.g. vertical spacing */
+p,
+ol,
+ul,
+pre,
+blockquote,
+figure,
+hr,
+dl {
+  margin: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul.timer__actions {
+  display: grid;
+  grid-gap: var(--spacing-2);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 0 var(--spacing-2) var(--spacing-2) var(--spacing-2);
+}
+
+ul.timer__actions li {
   width: 100%;
 }
 
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+ul.timer__actions button {
+  position: relative;
+  background-color: transparent;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-200);
+  padding: var(--spacing-4) var(--spacing-2);
+  width: 100%;
 }
+
+ul.timer__actions button:hover {
+  background-color: var(--gray-200);
+  color: var(--gray-800);
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Table content
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  color: var(--gray-500);
+}
+
+th,
+td {
+  padding: var(--spacing-1) var(--spacing-2);
+  text-align: left;
+  border: 1px solid var(--gray-300);
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Forms
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+fieldset {
+  border: 1px solid var(--gray-300);
+  display: grid;
+  grid-gap: var(--spacing-2);
+}
+
+fieldset.settings__projects div {
+  align-items: end;
+  display: grid;
+  grid-gap: var(--spacing-2);
+  grid-template-columns: var(--spacing-4) 30% auto;
+}
+
+form {
+  display: grid;
+  grid-gap: var(--spacing-2);
+  padding: var(--spacing-2);
+}
+
+form.timer__form .timer__form__projects {
+  width: 100%;
+  font-size: var(--text-xl);
+}
+
+form .search {
+  position: relative;
+}
+
+form .search ul {
+  display: block;
+  position: absolute;
+  overflow-y: auto;
+  z-index: 1;
+  max-height: 200px;
+  width: 100%;
+  background-color: pink;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+}
+
+.search button {
+  padding: var(--spacing-1) var(--spacing-2);
+  text-align: left;
+}
+
+.search button:hover {
+  background-color: var(--gray-400);
+}
+
+form .search ul li,
+form .search li button {
+  width: 100%;
+}
+
+/* `textarea` and `input` elements that share a similar look and similar styling
+capabilities */
+/* - common styling */
+textarea,
+select,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"] {
+  color: var(--gray-300);
+  background-color: var(--gray-700);
+  padding: var(--spacing-2) var(--spacing-1);
+}
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+/* Alpine-specific styles */
+[x-cloak] { display: none !important; }

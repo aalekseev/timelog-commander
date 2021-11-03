@@ -1,0 +1,25 @@
+<section
+  x-show="activeTab === 'report'"
+  x-data="{records: []}"
+  {# Look weird, but hey it works and fetches data on tab open #}
+  @tab-open.window="records = $event.detail == 'report' ? await (await fetch('/api/records')).json() : []"
+>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Duration (sec)</th>
+        <th>Key</th>
+      </tr>
+    </thead>
+    <tbody>
+      <template x-for="row in records">
+        <tr>
+          <td x-text="row.period"></td>
+          <td x-text="row.duration"></td>
+          <td x-text="row.active_task.key"></td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+</section>

@@ -8,7 +8,7 @@ packages = [{include="src"}]
 
 [tool.poetry.dependencies]
 python = "~3.9.0"
-pywebview = "^3.5"
+pywebview = {extras = ["qt"], version = "^3.5"}
 Flask = "^2.0.2"
 tinydb = "^4.5.2"
 

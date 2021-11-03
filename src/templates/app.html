@@ -2,69 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='bonsai.min.css') }}">
+  <title>Timelog Commander</title>
+  <link rel="shortcut icon" type="shortcut/icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer src="{{ url_for('static', filename='alpinejs@3.4.2.min.js') }}"></script>
 </head>
-<body>
-  <main>
-    <div>
-      <button style="--ta: left; --p: 0.5rem; --bgc: #374151; --c: #10B981; --bb: 1px">» Time Log</button>
-      <section style="--p: var(--p-2)">
-        <h2 style="--ta: center">Krah-Pipes</h2>
-        <div style="--d: grid; place-content: center; --p: 1rem">
-          <div style="--ta: center; --pos: relative">
-            <div style="--w: 1rem; --h: 1rem; --pos: absolute; --bgc: #34D399; --left: -1rem; --radius: 100%"></div>
-            <div style="--size: var(--typo-size-1)">00:12</div>
-          </div>
-        </div>
-        <form style="--d: grid; --gg: var(--p-2); --py: var(--p-2)">
-          <input style="--size: var(--typo-size-4)" type="text" value="Project Management" />
-          <input type="text" placeholder="Working on issue" />
-        </form>
-        <ul style="--d: grid; --ta: center; --gtc: repeat(4, minmax(0, 1fr))">
-          <li><button>KP</button></li>
-          <li><button>PAX</button></li>
-          <li><button>MLV</button></li>
-          <li><button>TTT</button></li>
-        </ul>
-      </section>
-    </div>
-    <div>
-      <button style="--ta: left; --p: 0.5rem; --bgc: #E5E7EB; --c: var(--text-main); --bb: 1px">» Report</button>
-      <section style="--p: var(--p-2)">
-        <table>
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>Issue Key</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>102s</td>
-              <td>KP-121</td>
-              <td>Code-review</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    <div>
-      <button style="--ta: left; --p: 0.5rem; --bgc: #E5E7EB; --c: var(--text-main); --bb: 1px">» Settings</button>
-      <form style="--p: var(--p-2); --d: grid; --gg: var(--p-2)" class="p-2 grid gap-2">
-        <fieldset style="--d: grid; --gg: var(--p-2); --gtc: repeat(4, minmax(0, 1fr))">
-          <legend>Jira Connection</legend>
-          <label for="jira-instance">Instance</label>
-          <input style="--gc: span 3/ span 3" id="jira-instance" type="url" placeholder="atlassian.jira.com" />
-          <label for="jira-email">Instance</label>
-          <input style="--gc: span 3/ span 3" id="jira-email" type="email" placeholder="someone@thorgate.eu" />
-          <label for="jira-api-key">API Key</label>
-          <input style="--gc: span 3/ span 3" id="jira-api-key" type="text" />
-        </fieldset>
-      </form>
-    </div>
-  </main>
+<body x-data="{activeTab: 'timer', tabs: ['timer', 'report', 'settings']}">
+  <nav>
+    <ul>
+      <template x-for="tab in tabs">
+        <li>
+          <button
+            @click="activeTab = tab; $dispatch('tab-open', tab);"
+            :class="activeTab === tab ? 'active' : ''"
+            x-text="tab"
+          ></button>
+        </li>
+      </template>
+    </ul>
+  </nav>
+  {% include 'timer.html' %}
+  {% include 'report.html' %}
+  {% include 'settings.html' %}
 </body>
 </html>

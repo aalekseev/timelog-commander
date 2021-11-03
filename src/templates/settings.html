@@ -1,0 +1,27 @@
+<section x-show="activeTab === 'settings'" class="settings">
+  <form>
+    <fieldset>
+      <legend>Jira Connection</legend>
+      <label for="jira_server">Server</label>
+      <input type="text" placeholder="atlassian.com" />
+      <label for="jira_account">Account</label>
+      <input type="email" />
+      <label for="password">Password</label>
+      <input type="password" />
+    </fieldset>
+    <fieldset class="settings__projects" x-data="{projects: [{id: 1, key: 'KP', task: 'Project management'}, {id: 22, key: 'MLV', task: 'Misc time'}]}">
+      <legend>Projects</legend>
+      <template x-for="project in projects" :key="project.id">
+        <div>
+          <p x-text="project.id"></p>
+          <select>
+            <option value="" x-text="project.key"></option>
+          </select>
+          <select>
+            <option value="" x-text="project.task"></option>
+          </select>
+        </div>
+      </template>
+    </fieldset>
+  </form>
+</section>
