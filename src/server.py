@@ -2,7 +2,7 @@
 import sys
 from datetime import datetime
 
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, where
 from jira import JIRA, resources
 
 from django import forms
@@ -14,7 +14,7 @@ from django.urls import path, reverse_lazy
 from django.shortcuts import render
 
 
-db = TinyDB("db.json")
+db = TinyDB("db.json", sort_keys=True, indent=2, separators=(",", ": "))
 credentials_tbl = db.table("credentials")
 
 
@@ -64,44 +64,40 @@ def login_view(request: HttpRequest):
     return render(request, "login.html", {"form": form})
 
 
+empty_timer = {
+    "project": None,
+    "task": None,
+    "start": None,
+    "end": None,
+    "elapsed": None,
+}
+
+
 def stopwatch(request: HttpRequest):
     table = db.table("records")
-    last_record = None
-    active_project = None
-    active_task = None
-    running_timer = None
-    elapsed_time = None
-    record_q = Query()
+    timer = {**empty_timer}
     # Searching only in unfinished records
-    records = table.search(~record_q.end.exists())
-    if records:
-        last_record = records[0]
-        active_project = records[0]["project"]
-        active_task = records[0]["task"]
-        running_timer = records[0]["timer"]
+    timers = table.search(~where("end").exists())
+    if timers:
+        timer = timers[0]
     if request.method == "POST":
-        if last_record:
+        if timer:
             table.update(
                 {"end": datetime.now().strftime("%Y-%M-%d %H:%m:%S")},
-                doc_ids=[last_record.doc_id],
+                doc_ids=[timer.doc_id],
             )
         if "close" in request.POST:
-            active_project = None
-            active_task = None
-            running_timer = None
+            timer = {**empty_timer}
         else:
-            active_project = request.POST["project"]
-            active_task = db.table("project_settings").get(
-                where("project") == active_project
+            timer["project"] = request.POST["project"]
+            timer["task"] = db.table("project_settings").get(
+                where("project") == timer["project"]
             )["task"]
-            running_timer = {"start": datetime.now().strftime("%Y-%M-%d %H:%m:%S")}
-            table.insert(
-                {"project": active_project, "task": active_task, "timer": running_timer}
-            )
-    if running_timer:
-        elapsed_time = str(
-            datetime.now()
-            - datetime.strptime(running_timer["start"], "%Y-%M-%d %H:%m:%S")
+            timer["start"] = datetime.now().strftime("%Y-%M-%d %H:%m:%S")
+            table.insert(timer)
+    if timer["start"]:
+        timer["elapsed"] = str(
+            datetime.now() - datetime.strptime(timer["start"], "%Y-%M-%d %H:%m:%S")
         ).split(".")[0]
     return render(
         request,
@@ -110,10 +106,7 @@ def stopwatch(request: HttpRequest):
             "tabs": ["log", "report", "settings"],
             "selected_tab": "log",
             "projects": db.table("project_settings").all(),
-            "active_project": active_project,
-            "active_task": active_task,
-            "running_timer": running_timer,
-            "elapsed_time": elapsed_time,
+            "timer": timer,
         },
     )
 

@@ -2,12 +2,12 @@
 {% load static %}
 {% block content %}
 <section class="timer">
-  <h2 class="title">{% if active_project %}{{ active_project }}{% else %}👽 HOLY COW 🐄{% endif %}</h2>
+  <h2 class="title">{% if timer and timer.project %}{{ timer.project }}{% else %}👽 HOLY COW 🐄{% endif %}</h2>
 
-  {% if running_timer %}
+  {% if timer.start %}
   <div class="timer__time">
     <div class="timer__clock">
-      <p>{{ elapsed_time }}</p>
+      <p>{{ timer.elapsed }}</p>
       <p class="seconds"></p>
     </div>
     <form action="" method="POST">
@@ -19,7 +19,7 @@
   {% endif %}
 
   <div>
-    {% if running_timer %}
+    {% if timer.start %}
       <form
         class="timer__form"
         x-data="{
@@ -48,7 +48,7 @@
           <input
             type="search"
             class="timer__form__projects"
-            value="{{ active_task }}"
+            value="{{ timer.task }}"
           >
         </div>
         <input x-model="activeComment" type="text" placeholder="Working on Issue" />
