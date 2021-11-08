@@ -1,72 +1,25 @@
-<section
-  class="timer"
-  x-cloak
-  x-data="{
-    projects: [],
-    activeProject: null,
-    activeTask: null,
-    activeComment: null,
-    activeTimer: null,
-    timerDuration: null,
-    timerPeriod: null,
-    getTime() { return (new Date()).toLocaleTimeString() },
-    startTracking() {
-      this.timerPeriod = this.getTime();
-      this.activeTimer = setInterval(() => {
-        this.timerDuration += 1;
-      }, 1000);
-    },
-    stopTracking() {
-      this.timerPeriod = this.timerPeriod + ' ' + this.getTime();
-      clearInterval(this.activeTimer);
-      this.activeTimer = null;
-      const data = {
-        active_task: this.activeTask,
-        active_comment: this.activeComment,
-        duration: this.timerDuration,
-        period: this.timerPeriod,
-      }
-      this.timerDuration = null;
-      this.timerPeriod = null;
-      // don't care about end result
-      fetch('/api/record', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {'Content-Type': 'application/json'}
-      });
-    },
-    currentSeconds: (duration) => {
-      let seconds = parseInt(duration % 60, 10);
-      return seconds < 10 ? '0' + seconds : seconds;
-    },
-    secondsToTime: (duration) => {
-      let minutes = parseInt((duration / 60) % 60, 10);
-      let hours = parseInt((duration / 3600) % 24, 10);
+{% extends "app.html" %}
+{% load static %}
+{% block content %}
+<section class="timer">
+  <h2 class="title">{% if active_project %}{{ active_project }}{% else %}👽 HOLY COW 🐄{% endif %}</h2>
 
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-
-      return hours + ':' + minutes;
-    }
-  }"
-  x-init="projects = await (await fetch('/api/projects')).json()"
-  x-show="activeTab === 'timer'"
->
-  <h2 class="timer__title" x-text="activeProject ? activeProject.name : '👽 HOLY COW 🐄'"></h2>
-  <div x-show="!activeTimer">
-    <img src="{{ url_for('static', filename='emergency.gif') }}" alt="Animated GIF to illustrate emergency situation">
-  </div>
-  <template x-if="activeTimer">
-    <div class="timer__time">
-      <div class="timer__clock">
-        <p x-text="secondsToTime(timerDuration)"></p>
-        <p class="seconds" x-text="currentSeconds(timerDuration)"></p>
-      </div>
-      <button class="close" @click="activeProject = null; activeTask: null; stopTracking()">✕</button>
+  {% if running_timer %}
+  <div class="timer__time">
+    <div class="timer__clock">
+      <p>{{ elapsed_time }}</p>
+      <p class="seconds"></p>
     </div>
-  </template>
+    <form action="" method="POST">
+      <input type="submit" name="close" class="close" value="✕" />
+    </form>
+  </div>
+  {% else %}
+  <img src="{%  static 'emergency.gif' %}" alt="Animated GIF to illustrate emergency situation">
+  {% endif %}
+
   <div>
-    <template x-if="activeProject">
+    {% if running_timer %}
       <form
         class="timer__form"
         x-data="{
@@ -95,31 +48,24 @@
           <input
             type="search"
             class="timer__form__projects"
-            x-model="searchInput"
-            @click="open = true"
-            @click.outside="open = false"
-            @input.debounce.200ms="tasks = await (await fetch('/api/tasks/' + activeProject.key + '?q=' + searchInput)).json()"
+            value="{{ active_task }}"
           >
         </div>
         <input x-model="activeComment" type="text" placeholder="Working on Issue" />
       </form>
-    </template>
-    <ul class="timer__actions">
-      <template x-for="project in projects">
-        <li>
-          <button
-            @click="
-              activeProject = project;
-              activeTask = project.defaultTask;
-              if (activeTimer) {
-                stopTracking();
-              }
-              startTracking();
-              $dispatch('start-tracking');"
-            x-text="project.key"
-          ></button>
-        </li>
-      </template>
-    </ul>
+    {% endif %}
+    <form method="POST" action="">
+      {% csrf_token %}
+      <ul class="timer__actions">
+        {% for project in projects %}
+          <li>
+            <input type="submit" name="project" value="{{ project.project }}" />
+          </li>
+        {% empty %}
+          <p>Let's <a href="{% url 'settings' %}">set some projects?</a></p>
+        {% endfor %}
+      </ul>
+    </form>
   </div>
 </section>
+{% endblock content %}

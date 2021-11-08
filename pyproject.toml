@@ -11,6 +11,8 @@ python = "~3.9.0"
 pywebview = {extras = ["qt"], version = "^3.5"}
 Flask = "^2.0.2"
 tinydb = "^4.5.2"
+Django = "^3.2.9"
+jira = "^3.0.1"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"

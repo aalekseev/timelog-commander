@@ -1,0 +1,13 @@
+{% extends "app.html" %}
+{% block content %}
+<section>
+  <h2 class="title">Jira credentials</h2>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <input type="url" name="jira_instance" placeholder="https://awesomecompany.atlassian.net" required>
+    <input type="email" name="jira_email" placeholder="my@workingemail.com" required>
+    <input type="password" name="jira_token" placeholder="API key" required>
+    <button type="submit">Save</button>
+  </form>
+</section>
+{% endblock %}

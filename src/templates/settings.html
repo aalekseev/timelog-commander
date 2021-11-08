@@ -1,27 +1,44 @@
-<section x-show="activeTab === 'settings'" class="settings">
-  <form>
-    <fieldset>
-      <legend>Jira Connection</legend>
-      <label for="jira_server">Server</label>
-      <input type="text" placeholder="atlassian.com" />
-      <label for="jira_account">Account</label>
-      <input type="email" />
-      <label for="password">Password</label>
-      <input type="password" />
+{% extends "app.html" %}
+{% block content %}
+<section>
+  <h2 class="title">Change Me</h2>
+  <a href="{% url 'login' %}">Update credentials?</a>
+  <form method="POST">
+    {{ formset.management_form }}
+    <fieldset class="settings__projects">
+      <legend>Actions</legend>
+      <div>
+        <p>Project</p>
+        <p>Task</p>
+      </div>
+      {% for form in formset %}
+      <div>
+        <input
+          type="search"
+          list="projects"
+          spellcheck="false"
+          {% if form.project.value %}value="{{ form.project.value }}"{% endif %}
+          name="form-{{ forloop.counter0 }}-project">
+        <input
+          type="search"
+          list="tasks"
+          spellcheck="false"
+          {% if form.task.value %}value="{{ form.task.value }}"{% endif %}
+          name="form-{{ forloop.counter0 }}-task">
+      </div>
+      {% endfor %}
     </fieldset>
-    <fieldset class="settings__projects" x-data="{projects: [{id: 1, key: 'KP', task: 'Project management'}, {id: 22, key: 'MLV', task: 'Misc time'}]}">
-      <legend>Projects</legend>
-      <template x-for="project in projects" :key="project.id">
-        <div>
-          <p x-text="project.id"></p>
-          <select>
-            <option value="" x-text="project.key"></option>
-          </select>
-          <select>
-            <option value="" x-text="project.task"></option>
-          </select>
-        </div>
-      </template>
-    </fieldset>
+    <datalist id="projects">
+      {% for project in projects.keys %}
+      <option value="{{ project }}">
+      {% endfor %}
+    </datalist>
+    <datalist id="tasks">
+      {% for task_key, values in tasks.items %}
+      <option value="{{ task_key }}">{{ task_key }}: {{ values.summary }}</option>
+      {% endfor %}
+    </datalist>
+    <button type="submit">Save</button>
   </form>
 </section>
+{% endblock content %}

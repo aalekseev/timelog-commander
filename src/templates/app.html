@@ -1,28 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Timelog Commander</title>
-  <link rel="shortcut icon" type="shortcut/icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <script defer src="{{ url_for('static', filename='alpinejs@3.4.2.min.js') }}"></script>
+  <link rel="shortcut icon" type="shortcut/icon" href="{% static 'favicon.ico' %}"/>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
-<body x-data="{activeTab: 'timer', tabs: ['timer', 'report', 'settings']}">
+<body>
   <nav>
     <ul>
-      <template x-for="tab in tabs">
-        <li>
-          <button
-            @click="activeTab = tab; $dispatch('tab-open', tab);"
-            :class="activeTab === tab ? 'active' : ''"
-            x-text="tab"
-          ></button>
-        </li>
-      </template>
+      {% for tab in tabs %}
+        <li><a href="{% url tab %}" class="{% if selected_tab == tab %}active{% endif %}">{{ tab }}</a></li>
+      {% endfor %}
     </ul>
   </nav>
-  {% include 'timer.html' %}
-  {% include 'report.html' %}
-  {% include 'settings.html' %}
+  {% block content %}{% endblock content %}
 </body>
 </html>

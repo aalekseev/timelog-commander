@@ -77,7 +77,9 @@ nav ul {
 nav li {
   width: 100%;
 }
-nav button {
+nav a {
+  display: block;
+  text-decoration: none;
   background-color: var(--gray-600);
   border-color: var(--gray-700);
   border-radius: 0;
@@ -88,12 +90,12 @@ nav button {
   text-transform: uppercase;
 }
 
-nav button:hover {
+nav a:hover {
   background-color: var(--gray-900);
   color: var(--gray-400);
 }
 
-nav button.active {
+nav a.active {
   background-color: var(--gray-200);
   border: 0 none;
   color: var(--gray-700);
@@ -110,7 +112,7 @@ section.timer {
   grid-template-rows: auto 1fr auto;
 }
 
-section.timer .timer__title {
+.title {
   font-size: var(--text-5xl);
   margin: 0;
   overflow: hidden;
@@ -126,19 +128,13 @@ section.timer .timer__title {
   font-size: var(--text-6xl);
 }
 
-.timer .timer__clock .seconds {
-  font-size: var(--text-base);
-  color: var(--gray-500);
-  padding-top: var(--spacing-2);
-}
-
 section.timer .timer__time {
   display: grid;
   align-self: center;
   grid-template-columns: auto auto;
 }
 
-section.timer button.close {
+section.timer input[type=submit].close {
   background-color: transparent;
   color: var(--gray-500);
   font-size: var(--text-5xl);
@@ -146,7 +142,7 @@ section.timer button.close {
   padding-right: var(--spacing-2);
 }
 
-section.timer button.close:hover {
+section.timer input[type=submit].close:hover {
   color: var(--gray-300);
 }
 
@@ -183,7 +179,7 @@ ul.timer__actions li {
   width: 100%;
 }
 
-ul.timer__actions button {
+ul.timer__actions input[type=submit] {
   position: relative;
   background-color: transparent;
   border: 1px solid var(--gray-300);
@@ -192,7 +188,7 @@ ul.timer__actions button {
   width: 100%;
 }
 
-ul.timer__actions button:hover {
+ul.timer__actions input[type=submit]:hover {
   background-color: var(--gray-200);
   color: var(--gray-800);
 }
@@ -227,11 +223,11 @@ fieldset {
   grid-gap: var(--spacing-2);
 }
 
-fieldset.settings__projects div {
+fieldset.settings__projects > div {
   align-items: end;
   display: grid;
   grid-gap: var(--spacing-2);
-  grid-template-columns: var(--spacing-4) 30% auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 form {
@@ -303,6 +299,3 @@ input[type="submit"] {
   cursor: pointer;
   transition: all 0.25s;
 }
-
-/* Alpine-specific styles */
-[x-cloak] { display: none !important; }

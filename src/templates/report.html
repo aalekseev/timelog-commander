@@ -1,9 +1,7 @@
-<section
-  x-show="activeTab === 'report'"
-  x-data="{records: []}"
-  {# Look weird, but hey it works and fetches data on tab open #}
-  @tab-open.window="records = $event.detail == 'report' ? await (await fetch('/api/records')).json() : []"
->
+{% extends "app.html" %}
+{% block content %}
+<section>
+  <h2 class="title">So Much Spent</h2>
   <table>
     <thead>
       <tr>
@@ -13,13 +11,14 @@
       </tr>
     </thead>
     <tbody>
-      <template x-for="row in records">
+      {% for record in rows %}
         <tr>
-          <td x-text="row.period"></td>
-          <td x-text="row.duration"></td>
-          <td x-text="row.active_task.key"></td>
+          <td>{{ record.timer.start }} - {{ record.end }}</td>
+          <td>0</td>
+          <td>{{ record.project }}</td>
         </tr>
-      </template>
+      {% endfor %}
     </tbody>
   </table>
 </section>
+{% endblock content %}
